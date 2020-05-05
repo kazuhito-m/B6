@@ -3,20 +3,108 @@
 <head>
 </head>
 <style type="text/css">
-  <!--
   div.example {
     width: 1000px;
-    height: 800px;
-    background-color: red;
+    height: 1000px;
+    background-color: fffbf0;
     overflow: scroll;
   }
-  -->
 </style>
 
 <body>
-  <div class="example">
-    UXMILK・UXMILK・UXMILK・UXMILK・UXMILK・UXMILK・UXMILK・UXMILK
+  <button id="testButton">描画テスト</button>
+  <button id="clearButton">クリア</button>
+
+  <div class="example" id="diaglam">
+    <canvas id="canvas" class="test">
+      図形を表示するには、canvasタグをサポートしたブラウザが必要です。
+    </canvas>
   </div>
+  <script type="text/javascript">
+    function resizeFit() {
+      const canvas = document.getElementById('canvas');
+      canvas.width = 1000 - 15;
+      canvas.height = 1000 - 15;
+    }
+
+    function test() {
+      resizeFit();
+
+      const canvas = document.getElementById('canvas');
+
+      if (!canvas.getContext) return;
+      const context = canvas.getContext('2d');
+
+      drawDiaglam(context);
+
+      drawEntityBox(context);
+
+      context.fill();
+    }
+
+    function claerCanvas() {
+      resizeFit();
+      const canvas = document.getElementById('canvas');
+      if (!canvas.getContext) return;
+      const context = canvas.getContext('2d');
+      context.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+    function drawDiaglam(context) {
+      const left = 100;
+      const top = 100;
+      const width = 800;
+      const height = 800;
+
+      context.fillStyle = 'rgb(255,255,255)';
+      context.fillRect(top, left, width, height);
+
+      context.lineWidth = 1;
+      context.strokeStyle = 'rgb(198,190,198)';
+      context.strokeRect(top, left, width, height);
+
+      const INTERVAL = 50;
+
+      let count = 0;
+      for (let i = left + INTERVAL; i < left + width; i+=INTERVAL) {
+        count++;
+        context.beginPath();
+        context.setLineDash((count % 5 === 0) ? [] : [3, 3]);
+        context.moveTo(i, top);
+        context.lineTo(i, top + height);
+        context.stroke();
+      }
+      count = 0;
+      for (let j = top + INTERVAL; j < top + height; j+=INTERVAL) {
+        count++;
+        context.beginPath();
+        context.setLineDash((count % 5 === 0) ? [] : [3, 3]);
+        context.moveTo(left, j);
+        context.lineTo(left + width, j);
+        context.stroke();
+      }
+    }
+
+    function drawEntityBox(context) {
+      const left = 225;
+      const top = 225;
+      const width = 300;
+      const height = 220;
+
+      context.fillStyle = 'rgb(255,255,255)';
+      context.fillRect(top, left, width, height);
+
+      context.lineWidth = 1;
+      context.strokeStyle = 'rgb(0,0,0)';
+      context.strokeRect(top, left, width, height);
+    }
+
+    const button = document.getElementById('testButton');
+    button.addEventListener('click', test, false)
+
+    const cleaerButton = document.getElementById('clearButton');
+    cleaerButton.addEventListener('click', claerCanvas, false)
+</script>
 </body>
 
 </html>
