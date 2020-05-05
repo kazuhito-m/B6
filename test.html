@@ -14,6 +14,9 @@
 <body>
   <button id="testButton">描画テスト</button>
   <button id="clearButton">クリア</button>
+  <button id="zoomInButton">Zoom In</button>
+  <button id="zoomOutButton">Zoom Out</button>
+  <input id="zoomText" type="text" value="" disabled="disabled" />
 
   <div class="example" id="diaglam">
     <canvas id="canvas" class="test">
@@ -21,13 +24,20 @@
     </canvas>
   </div>
   <script type="text/javascript">
+
+    const BASE_WIDTH = 1000 - 15;
+    const BASE_HEIGHT = 1000 - 15;
+
     function resizeFit() {
       const canvas = document.getElementById('canvas');
-      canvas.width = 1000 - 15;
-      canvas.height = 1000 - 15;
+      canvas.width = BASE_WIDTH * zoom;
+      canvas.height = BASE_HEIGHT * zoom;
+
+      const zoomText = document.getElementById('zoomText');
+      zoomText.value = Math.floor(zoom * 100) + ' %';
     }
 
-    function test() {
+    function rendering() {
       resizeFit();
 
       const canvas = document.getElementById('canvas');
@@ -35,11 +45,10 @@
       if (!canvas.getContext) return;
       const context = canvas.getContext('2d');
 
+      context.scale(zoom, zoom);
+
       drawDiaglam(context);
-
       drawEntityBox(context);
-
-      context.fill();
     }
 
     function claerCanvas() {
@@ -91,19 +100,47 @@
       const width = 300;
       const height = 220;
 
+      context.fillStyle = 'rgb(198,195,198)';
+      context.fillRect(top + 5, left + 5, width, height);
+
       context.fillStyle = 'rgb(255,255,255)';
       context.fillRect(top, left, width, height);
 
       context.lineWidth = 1;
       context.strokeStyle = 'rgb(0,0,0)';
       context.strokeRect(top, left, width, height);
+
+      context.font = "10px sans-serif";
+      context.fillStyle = 'rgb(0,0,0)';
+      context.fillText("セッション情報管理テーブル", left, top - 5);
+    }
+
+    const ZOOM_RATIO = 1.25;
+    let zoom = 1;
+
+    function zoomIn() {
+      zoom = zoom * ZOOM_RATIO;
+      claerCanvas()
+      rendering();
+    }
+
+    function zoomOut() {
+      zoom = zoom / ZOOM_RATIO;
+      claerCanvas()
+      rendering();   
     }
 
     const button = document.getElementById('testButton');
-    button.addEventListener('click', test, false)
+    button.addEventListener('click', rendering, false);
 
     const cleaerButton = document.getElementById('clearButton');
-    cleaerButton.addEventListener('click', claerCanvas, false)
+    cleaerButton.addEventListener('click', claerCanvas, false);
+
+    const zoomInbutton = document.getElementById('zoomInButton');
+    zoomInbutton.addEventListener('click', zoomIn, false);
+
+    const zoomOutButton = document.getElementById('zoomOutButton');
+    zoomOutButton.addEventListener('click', zoomOut, false);
 </script>
 </body>
 
