@@ -49,6 +49,7 @@
 
       drawDiaglam(context);
       drawEntityBox(context);
+      drawEntityBox2(context);
     }
 
     function claerCanvas() {
@@ -75,7 +76,7 @@
       const INTERVAL = 50;
 
       let count = 0;
-      for (let i = left + INTERVAL; i < left + width; i+=INTERVAL) {
+      for (let i = left + INTERVAL; i < left + width; i += INTERVAL) {
         count++;
         context.beginPath();
         context.setLineDash((count % 5 === 0) ? [] : [3, 3]);
@@ -84,7 +85,7 @@
         context.stroke();
       }
       count = 0;
-      for (let j = top + INTERVAL; j < top + height; j+=INTERVAL) {
+      for (let j = top + INTERVAL; j < top + height; j += INTERVAL) {
         count++;
         context.beginPath();
         context.setLineDash((count % 5 === 0) ? [] : [3, 3]);
@@ -113,21 +114,86 @@
       context.font = "10px sans-serif";
       context.fillStyle = 'rgb(0,0,0)';
       context.fillText("セッション情報管理テーブル", left, top - 5);
+
+      const padding = 3;
+      const textHeight = 8;
+
+      const fieldName = "セッションID";
+      const textSizes = context.measureText(fieldName);
+      context.fillText(fieldName, left + padding, top + padding + textHeight);
+
+      const lineTop = top + textHeight + padding * 2;
+      context.beginPath();
+      context.strokeStyle = 'rgb(0,0,0)';
+      context.setLineDash([]);
+      context.moveTo(left, lineTop);
+      context.lineTo(left + width, lineTop);
+      context.stroke();
+    }
+
+    function drawRectKadomaru(context, left, top, width, height, stroke, fill) {
+      const rect = 5;
+      context.beginPath();
+      context.moveTo(left, top + rect);
+      context.arc(left + rect, top + height - rect, rect, Math.PI, Math.PI * 0.5, true);
+      context.arc(left + width - rect, top + height - rect, rect, Math.PI * 0.5, 0, 1);
+      context.arc(left + width - rect, top + rect, rect, 0, Math.PI * 1.5, 1);
+      context.arc(left + rect, top + rect, rect, Math.PI * 1.5, Math.PI, 1);
+      context.closePath();
+      if (stroke) context.stroke();
+      if (fill) context.fill();
+    }
+
+
+    function drawEntityBox2(context) {
+      const left = 225;
+      const top = 600;
+      const width = 300;
+      const height = 220;
+
+      context.fillStyle = 'rgb(198,195,198)';
+      drawRectKadomaru(context, left + 5, top + 5, width, height, false, true);
+
+      context.fillStyle = 'rgb(255,255,255)';
+      drawRectKadomaru(context, left, top, width, height, false, true);
+
+      context.lineWidth = 1;
+      context.strokeStyle = 'rgb(0,0,0)';
+      drawRectKadomaru(context, left, top, width, height, true, false);
+
+      context.font = "10px sans-serif";
+      context.fillStyle = 'rgb(0,0,0)';
+      context.fillText("操作状況", left, top - 5);
+
+      const padding = 3;
+      const textHeight = 8;
+
+      const fieldName = "セッションID";
+      const textSizes = context.measureText(fieldName);
+      context.fillText(fieldName, left + padding, top + padding + textHeight);
+
+      const lineTop = top + textHeight + padding * 2;
+      context.beginPath();
+      context.strokeStyle = 'rgb(0,0,0)';
+      context.setLineDash([]);
+      context.moveTo(left, lineTop);
+      context.lineTo(left + width, lineTop);
+      context.stroke();
     }
 
     const ZOOM_RATIO = 1.25;
     let zoom = 1;
 
     function zoomIn() {
-      zoom = zoom * ZOOM_RATIO;
+      zoom *= ZOOM_RATIO;
       claerCanvas()
       rendering();
     }
 
     function zoomOut() {
-      zoom = zoom / ZOOM_RATIO;
+      zoom /= ZOOM_RATIO;
       claerCanvas()
-      rendering();   
+      rendering();
     }
 
     const button = document.getElementById('testButton');
@@ -141,7 +207,7 @@
 
     const zoomOutButton = document.getElementById('zoomOutButton');
     zoomOutButton.addEventListener('click', zoomOut, false);
-</script>
+  </script>
 </body>
 
 </html>
