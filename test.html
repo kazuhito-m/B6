@@ -208,6 +208,13 @@
       rendering();
     }
 
+    function doubleClickCanvas(e) {
+      const rect = e.target.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      alert(`X:${x}, Y:${y}`);
+    }
+
     const button = document.getElementById('testButton');
     button.addEventListener('click', rendering, false);
 
@@ -222,6 +229,9 @@
 
     const fileSelector = document.getElementById('fileSelector');
     fileSelector.addEventListener('change', loadFile);
+
+    const canvas = document.getElementById('canvas');
+    canvas.addEventListener('dblclick', doubleClickCanvas);
   </script>
 </body>
 
