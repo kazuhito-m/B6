@@ -17,6 +17,7 @@
   <button id="zoomInButton">Zoom In</button>
   <button id="zoomOutButton">Zoom Out</button>
   <input id="zoomText" type="text" value="" disabled="disabled" />
+  <input type="file" id="fileSelector" name="avatar" accept=".a5er">
 
   <div class="example" id="diaglam">
     <canvas id="canvas" class="test">
@@ -144,7 +145,6 @@
       if (fill) context.fill();
     }
 
-
     function drawEntityBox2(context) {
       const left = 225;
       const top = 600;
@@ -181,6 +181,18 @@
       context.stroke();
     }
 
+    function loadFile() {
+      const fileSelector = document.getElementById('fileSelector');
+      const files = fileSelector.files;
+      if (files.length === 0) return alert('ファイルを選択して下さい。');
+      const file = files[0];
+      const reader = new FileReader();
+      reader.onload = function () {
+        console.log(reader.result);	// 文字列
+      }
+      reader.readAsText(file);
+    }
+
     const ZOOM_RATIO = 1.25;
     let zoom = 1;
 
@@ -207,6 +219,9 @@
 
     const zoomOutButton = document.getElementById('zoomOutButton');
     zoomOutButton.addEventListener('click', zoomOut, false);
+
+    const fileSelector = document.getElementById('fileSelector');
+    fileSelector.addEventListener('change', loadFile);
   </script>
 </body>
 
