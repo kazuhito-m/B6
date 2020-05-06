@@ -51,5 +51,6 @@ export default {
     */
     extend (config: any, ctx: any) {
     }
-  }
+  },
+  srcDir: '/src'
 }
